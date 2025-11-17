@@ -1,18 +1,82 @@
-{% extends 'layout.html' %} {% block content %}
-<div class="container">
-  {% for row in content %}
-  <div class="card">
-    <img
-      class="card-image"
-      src="{{ row[4] }}"
-      alt="Product image for the {{ row[1] }} VSCode extension."
-    />
-    <h1 class="card-name">{{ row[1] }}</h1>
-    <p class="card-about">{{ row[3] }}</p>
-    <a class="card-link" href="{{ row[2] }}"
-      ><button class="btn">Read More</button></a
-    >
-  </div>
-  {% endfor %}
+{% extends 'layout.html' %}
+{% block content %}
+<div class="hero-section">
+  <h1>Welcome to StreamFinder, {{ username }}!</h1>
+  <p>Find where to watch your favorite movies and TV shows across all streaming platforms.</p>
 </div>
+
+<div class="featured-section">
+  <h2>🔥 Hottest Picks This Week</h2>
+  
+  <div class="section">
+    <h3>Popular Movies</h3>
+    <div class="container">
+      {% for movie in hot_movies %}
+      <div class="card">
+        <img class="card-image" src="{{ movie[6] }}" alt="{{ movie[1] }}" />
+        <div class="card-content">
+          <h3 class="card-title">{{ movie[1] }}</h3>
+          <p class="card-genre">{{ movie[3] }} • {{ movie[4] }}</p>
+          <p class="card-rating">⭐ {{ movie[5] }}/10</p>
+          <div class="card-actions">
+            <a href="{{ url_for('movie_detail', movie_id=movie[0]) }}" class="btn btn-outline">View Details</a>
+            <button class="btn btn-watchlist" onclick="addToWatchlist({{ movie[0] }}, 'movie')">+ Watchlist</button>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+
+  <div class="section">
+    <h3>Trending TV Shows</h3>
+    <div class="container">
+      {% for show in hot_shows %}
+      <div class="card">
+        <img class="card-image" src="{{ show[6] }}" alt="{{ show[1] }}" />
+        <div class="card-content">
+          <h3 class="card-title">{{ show[1] }}</h3>
+          <p class="card-genre">{{ show[3] }} • {{ show[4] }}</p>
+          <p class="card-rating">⭐ {{ show[5] }}/10 • {{ show[7] }} seasons</p>
+          <div class="card-actions">
+            <a href="{{ url_for('show_detail', show_id=show[0]) }}" class="btn btn-outline">View Details</a>
+            <button class="btn btn-watchlist" onclick="addToWatchlist({{ show[0] }}, 'show')">+ Watchlist</button>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+<div class="quick-links">
+  <a href="{{ url_for('movies') }}" class="btn btn-large">Browse All Movies</a>
+  <a href="{{ url_for('shows') }}" class="btn btn-large">Browse All TV Shows</a>
+</div>
+
+<script>
+async function addToWatchlist(itemId, itemType) {
+  try {
+    const response = await fetch('/add_to_watchlist', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        item_id: itemId,
+        item_type: itemType
+      })
+    });
+    
+    const result = await response.json();
+    if (result.success) {
+      alert('Added to watchlist!');
+    } else {
+      alert('Already in watchlist!');
+    }
+  } catch (error) {
+    alert('Error adding to watchlist');
+  }
+}
+</script>
 {% endblock %}

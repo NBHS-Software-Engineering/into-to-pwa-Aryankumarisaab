@@ -1,74 +1,78 @@
 {
-  "name": "VSCode Extension Catalogue",
-  "short_name": "vscodeextcat",
+  "name": "StreamFinder - Find Where to Watch",
+  "short_name": "StreamFinder",
   "start_url": "/",
   "display": "standalone",
-  "background_color": "#fdfdfd",
+  "background_color": "#0f1419",
   "theme_color": "#14E6DD",
-  "orientation": "landscape-primary",
+  "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "icons/icon-128x128.png",
+      "src": "icons/icon-72x72.png",
+      "sizes": "72x72",
       "type": "image/png",
-      "sizes": "128x128",
-      "purpose": "maskable"
+      "purpose": "maskable any"
+    },
+    {
+      "src": "icons/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "maskable any"
     },
     {
       "src": "icons/icon-128x128.png",
-      "type": "image/png",
       "sizes": "128x128",
-      "purpose": "any"
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "icons/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "maskable any"
+    },
+    {
+      "src": "icons/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "maskable any"
     },
     {
       "src": "icons/icon-192x192.png",
-      "type": "image/png",
       "sizes": "192x192",
-      "purpose": "maskable"
-    },
-    {
-      "src": "icons/icon-192x192.png",
       "type": "image/png",
-      "sizes": "192x192",
-      "purpose": "any"
+      "purpose": "maskable any"
     },
     {
       "src": "icons/icon-384x384.png",
-      "type": "image/png",
       "sizes": "384x384",
-      "purpose": "maskable"
-    },
-    {
-      "src": "icons/icon-384x384.png",
       "type": "image/png",
-      "sizes": "384x384",
-      "purpose": "any"
+      "purpose": "maskable any"
     },
     {
       "src": "icons/icon-512x512.png",
-      "type": "image/png",
       "sizes": "512x512",
-      "purpose": "maskable"
-    },
-    {
-      "src": "icons/icon-512x512.png",
       "type": "image/png",
-      "sizes": "512x512",
-      "purpose": "any"
+      "purpose": "maskable any"
     }
   ],
   "screenshots": [
     {
-      "src": "icons/desktop_screenshot.png",
-      "sizes": "1920x1080",
-      "type": "image/png",
-      "label": ""
-    },
-    {
-      "src": "icons/mobile_screenshot.png",
-      "sizes": "1080x1920",
+      "src": "icons/desktop-screenshot.png",
+      "sizes": "1280x720",
       "type": "image/png",
       "form_factor": "wide",
-      "label": ""
+      "label": "StreamFinder desktop view"
+    },
+    {
+      "src": "icons/mobile-screenshot.png",
+      "sizes": "720x1280",
+      "type": "image/png",
+      "form_factor": "narrow",
+      "label": "StreamFinder mobile view"
     }
-  ]
+  ],
+  "categories": ["entertainment", "productivity"],
+  "description": "Find where to watch your favorite movies and TV shows across all streaming platforms",
+  "lang": "en-US"
 }

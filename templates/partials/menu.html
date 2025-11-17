@@ -1,9 +1,34 @@
 <nav>
-  <img src="static\images\logo.png" alt="VSCode Extensions site logo." />
-  <h1>VSCode Extensions</h1>
-  <ul class="topnav">
-    <li><a href="#">Home</a></li>
-    <li><a href="add.html">Add me</a></li>
-    <li><a href="about.html">About</a></li>
-  </ul>
+  <div class="nav-brand">
+    <img src="https://play-lh.googleusercontent.com/Mg-BOxHpM6NcHSaPfv3rnwYSkaDUDikCsAjYWjuVnXd2JbYR2xz_h3M9vHefrt6QpJA=w600-h300-pc0xffffff-pd" alt="logogogogog" />
+    <h1>StreamFinder</h1>
+  </div>
+  
+  {% if session.username %}
+  <div class="nav-links">
+    <ul class="topnav">
+      <li><a href="{{ url_for('index') }}">Home</a></li>
+      <li><a href="{{ url_for('movies') }}">Movies</a></li>
+      <li><a href="{{ url_for('shows') }}">TV Shows</a></li>
+      <li><a href="{{ url_for('watchlist') }}">My Watchlist</a></li>
+      <li class="search-item">
+        <form action="{{ url_for('search') }}" method="GET" class="search-form">
+          <input type="text" name="q" placeholder="Search movies and shows..." />
+          <button type="submit">Search</button>
+        </form>
+      </li>
+      <li class="user-menu">
+        <span>Welcome, {{ session.username }}</span>
+        <a href="{{ url_for('logout') }}">Logout</a>
+      </li>
+    </ul>
+  </div>
+  {% else %}
+  <div class="nav-links">
+    <ul class="topnav">
+      <li><a href="{{ url_for('login') }}">Login</a></li>
+      <li><a href="{{ url_for('signup') }}">Sign Up</a></li>
+    </ul>
+  </div>
+  {% endif %}
 </nav>

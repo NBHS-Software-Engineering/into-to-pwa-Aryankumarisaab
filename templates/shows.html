@@ -1,0 +1,82 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="page-header">
+  <h1>📺 TV Shows</h1>
+  <p>Discover amazing television series</p>
+</div>
+
+<div class="filters">
+  <a href="{{ url_for('shows') }}" class="btn btn-outline">All Shows</a>
+  <a href="#free" class="btn btn-outline">Free Only</a>
+</div>
+
+<div class="section">
+  <h2>All TV Shows ({{ all_shows|length }})</h2>
+  <div class="container">
+    {% for show in all_shows %}
+    <div class="card">
+      <img class="card-image" src="{{ show[6] }}" alt="{{ show[1] }}" />
+      <div class="card-content">
+        <h3 class="card-title">{{ show[1] }}</h3>
+        <p class="card-genre">{{ show[3] }} • {{ show[4] }}</p>
+        <p class="card-rating">⭐ {{ show[5] }}/10 • {{ show[7] }} seasons</p>
+        {% if show[8] %}
+        <span class="free-badge">FREE</span>
+        {% endif %}
+        <div class="card-actions">
+          <a href="{{ url_for('show_detail', show_id=show[0]) }}" class="btn btn-outline">Where to Watch</a>
+          <button class="btn btn-watchlist" onclick="addToWatchlist({{ show[0] }}, 'show')">+ Watchlist</button>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="section" id="free">
+  <h2>🎁 Free TV Shows ({{ free_shows|length }})</h2>
+  <div class="container">
+    {% for show in free_shows %}
+    <div class="card">
+      <img class="card-image" src="{{ show[6] }}" alt="{{ show[1] }}" />
+      <div class="card-content">
+        <h3 class="card-title">{{ show[1] }}</h3>
+        <p class="card-genre">{{ show[3] }} • {{ show[4] }}</p>
+        <p class="card-rating">⭐ {{ show[5] }}/10 • {{ show[7] }} seasons</p>
+        <span class="free-badge">FREE</span>
+        <div class="card-actions">
+          <a href="{{ url_for('show_detail', show_id=show[0]) }}" class="btn btn-outline">Watch Free</a>
+          <button class="btn btn-watchlist" onclick="addToWatchlist({{ show[0] }}, 'show')">+ Watchlist</button>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+
+<script>
+async function addToWatchlist(itemId, itemType) {
+  try {
+    const response = await fetch('/add_to_watchlist', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        item_id: itemId,
+        item_type: itemType
+      })
+    });
+    
+    const result = await response.json();
+    if (result.success) {
+      alert('Added to watchlist!');
+    } else {
+      alert('Already in watchlist!');
+    }
+  } catch (error) {
+    alert('Error adding to watchlist');
+  }
+}
+</script>
+{% endblock %}

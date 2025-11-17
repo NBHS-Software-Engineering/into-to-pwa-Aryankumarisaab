@@ -1,0 +1,83 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="detail-container">
+  <div class="detail-header">
+    <div class="detail-poster">
+      <img src="{{ show[6] }}" alt="{{ show[1] }}" class="poster-image">
+    </div>
+    <div class="detail-info">
+      <h1>{{ show[1] }}</h1>
+      <div class="detail-meta">
+        <span class="rating">⭐ {{ show[5] }}/10</span>
+        <span class="year">{{ show[4] }}</span>
+        <span class="seasons">{{ show[7] }} seasons</span>
+        <span class="genre">{{ show[3] }}</span>
+        {% if show[8] %}
+        <span class="free-badge large">FREE</span>
+        {% endif %}
+      </div>
+      <p class="description">{{ show[2] }}</p>
+      <div class="detail-actions">
+        <button class="btn btn-watchlist" onclick="addToWatchlist({{ show[0] }}, 'show')">
+          + Add to Watchlist
+        </button>
+        <a href="{{ url_for('shows') }}" class="btn btn-outline">← Back to TV Shows</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="streaming-section">
+    <h2>📺 Where to Watch</h2>
+    <div class="platforms-grid">
+      {% if platforms %}
+        {% for platform in platforms %}
+        <div class="platform-card">
+          <div class="platform-logo">
+            <img src="{{ platform[1] }}" alt="{{ platform[0] }}">
+          </div>
+          <div class="platform-info">
+            <h3>{{ platform[0] }}</h3>
+            {% if platform[3] %}
+            <span class="free-badge">FREE</span>
+            {% endif %}
+          </div>
+          <a href="{{ platform[2] }}" target="_blank" class="btn btn-primary platform-link">
+            Watch Now
+          </a>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="no-platforms">
+          <p>No streaming platforms available for this show.</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<script>
+async function addToWatchlist(itemId, itemType) {
+  try {
+    const response = await fetch('/add_to_watchlist', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        item_id: itemId,
+        item_type: itemType
+      })
+    });
+    
+    const result = await response.json();
+    if (result.success) {
+      alert('Added to watchlist!');
+    } else {
+      alert('Already in watchlist!');
+    }
+  } catch (error) {
+    alert('Error adding to watchlist');
+  }
+}
+</script>
+{% endblock %}

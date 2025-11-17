@@ -5,16 +5,42 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <meta http-equiv="Content-Security-Policy" content="script-src 'self';" />
-    <link rel="stylesheet" href="static/css/style.css" />
-    <title>VSCode Extension Catalogue</title>
-    <link rel="manifest" href="static/manifest.json" />
-    <link rel="icon" type="image/x-icon" href="static/images/favicon.png" />
+    
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#14E6DD" />
+    <meta name="description" content="Find where to watch your favorite movies and TV shows across all streaming platforms" />
+    <meta name="keywords" content="movies, tv shows, streaming, netflix, disney, prime, where to watch" />
+    <meta name="author" content="StreamFinder" />
+    
+    <!-- Apple PWA Meta Tags -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="StreamFinder" />
+    <link rel="apple-touch-icon" href="{{ url_for('static', filename='icons/icon-152x152.png') }}" />
+    
+    <!-- Microsoft PWA Meta Tags -->
+    <meta name="msapplication-TileColor" content="#14E6DD" />
+    <meta name="msapplication-TileImage" content="{{ url_for('static', filename='icons/icon-144x144.png') }}" />
+    
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+    <title>StreamFinder - Find Where to Watch</title>
+    <link rel="manifest" href="{{ url_for('static', filename='manifest.json') }}" />
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='images/favicon.png') }}" />
   </head>
 
   <body>
     <main>
-      {% include "partials/menu.html" %} {% block content %}{% endblock %}
+      {% include "partials/menu.html" %} 
+      {% block content %}{% endblock %}
     </main>
-    <script src="static/js/app.js"></script>
+    
+    <!-- Install Prompt (hidden by default) -->
+    <div id="installPrompt" style="display: none; position: fixed; bottom: 20px; right: 20px; background: #1a1f25; padding: 1rem; border-radius: 8px; border: 2px solid #14e6dd; z-index: 1000; max-width: 300px;">
+      <p style="margin-bottom: 1rem; color: white;">Install StreamFinder for better experience?</p>
+      <button onclick="installPWA()" class="btn btn-primary" style="margin-right: 0.5rem;">Install</button>
+      <button onclick="document.getElementById('installPrompt').style.display = 'none'" class="btn btn-outline">Later</button>
+    </div>
+    
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
   </body>
 </html>

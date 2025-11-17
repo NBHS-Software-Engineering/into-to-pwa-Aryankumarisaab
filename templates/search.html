@@ -1,0 +1,124 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="page-header">
+  <h1>🔍 Search Results</h1>
+  <p>Search query: "{{ query }}"</p>
+</div>
+
+{% if query %}
+  <div class="search-results">
+    {% if movies or shows %}
+      {% if movies %}
+      <div class="section">
+        <h2>Movies ({{ movies|length }})</h2>
+        <div class="container">
+          {% for movie in movies %}
+          <div class="card">
+            <img class="card-image" src="{{ movie[6] }}" alt="{{ movie[1] }}" />
+            <div class="card-content">
+              <h3 class="card-title">{{ movie[1] }}</h3>
+              <p class="card-genre">{{ movie[3] }} • {{ movie[4] }}</p>
+              <p class="card-rating">⭐ {{ movie[5] }}/10 • {{ movie[7] }}</p>
+              {% if movie[8] %}
+              <span class="free-badge">FREE</span>
+              {% endif %}
+              <div class="card-actions">
+                <a href="{{ url_for('movie_detail', movie_id=movie[0]) }}" class="btn btn-outline">Where to Watch</a>
+                <button class="btn btn-watchlist" onclick="addToWatchlist({{ movie[0] }}, 'movie')">+ Watchlist</button>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+
+      {% if shows %}
+      <div class="section">
+        <h2>TV Shows ({{ shows|length }})</h2>
+        <div class="container">
+          {% for show in shows %}
+          <div class="card">
+            <img class="card-image" src="{{ show[6] }}" alt="{{ show[1] }}" />
+            <div class="card-content">
+              <h3 class="card-title">{{ show[1] }}</h3>
+              <p class="card-genre">{{ show[3] }} • {{ show[4] }}</p>
+              <p class="card-rating">⭐ {{ show[5] }}/10 • {{ show[7] }} seasons</p>
+              {% if show[8] %}
+              <span class="free-badge">FREE</span>
+              {% endif %}
+              <div class="card-actions">
+                <a href="{{ url_for('show_detail', show_id=show[0]) }}" class="btn btn-outline">Where to Watch</a>
+                <button class="btn btn-watchlist" onclick="addToWatchlist({{ show[0] }}, 'show')">+ Watchlist</button>
+              </div>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    {% else %}
+      <div class="no-results">
+        <h2>No results found for "{{ query }}"</h2>
+        <p>Try searching for different keywords or browse our collections:</p>
+        <div class="quick-links">
+          <a href="{{ url_for('movies') }}" class="btn btn-large">Browse Movies</a>
+          <a href="{{ url_for('shows') }}" class="btn btn-large">Browse TV Shows</a>
+        </div>
+      </div>
+    {% endif %}
+  </div>
+{% else %}
+  <div class="no-query">
+    <h2>Enter a search term to find movies and TV shows</h2>
+    <p>Use the search box in the navigation to start searching.</p>
+  </div>
+{% endif %}
+
+<style>
+.search-results {
+  margin-top: 2rem;
+}
+
+.no-results, .no-query {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #888;
+}
+
+.no-results h2, .no-query h2 {
+  color: #ffffff;
+  margin-bottom: 1rem;
+}
+
+.no-results .quick-links {
+  margin-top: 2rem;
+}
+</style>
+
+<script>
+async function addToWatchlist(itemId, itemType) {
+  try {
+    const response = await fetch('/add_to_watchlist', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        item_id: itemId,
+        item_type: itemType
+      })
+    });
+    
+    const result = await response.json();
+    if (result.success) {
+      alert('Added to watchlist!');
+    } else {
+      alert('Already in watchlist!');
+    }
+  } catch (error) {
+    alert('Error adding to watchlist');
+  }
+}
+</script>
+{% endblock %}

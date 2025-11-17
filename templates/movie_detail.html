@@ -1,0 +1,238 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="detail-container">
+  <div class="detail-header">
+    <div class="detail-poster">
+      <img src="{{ movie[6] }}" alt="{{ movie[1] }}" class="poster-image">
+    </div>
+    <div class="detail-info">
+      <h1>{{ movie[1] }}</h1>
+      <div class="detail-meta">
+        <span class="rating">⭐ {{ movie[5] }}/10</span>
+        <span class="year">{{ movie[4] }}</span>
+        <span class="duration">{{ movie[7] }}</span>
+        <span class="genre">{{ movie[3] }}</span>
+        {% if movie[8] %}
+        <span class="free-badge large">FREE</span>
+        {% endif %}
+      </div>
+      <p class="description">{{ movie[2] }}</p>
+      <div class="detail-actions">
+        <button class="btn btn-watchlist" onclick="addToWatchlist({{ movie[0] }}, 'movie')">
+          + Add to Watchlist
+        </button>
+        <a href="{{ url_for('movies') }}" class="btn btn-outline">← Back to Movies</a>
+      </div>
+    </div>
+  </div>
+
+  <div class="streaming-section">
+    <h2>📺 Where to Watch</h2>
+    <div class="platforms-grid">
+      {% if platforms %}
+        {% for platform in platforms %}
+        <div class="platform-card">
+          <div class="platform-logo">
+            <img src="{{ platform[1] }}" alt="{{ platform[0] }}">
+          </div>
+          <div class="platform-info">
+            <h3>{{ platform[0] }}</h3>
+            {% if platform[3] %}
+            <span class="free-badge">FREE</span>
+            {% endif %}
+          </div>
+          <a href="{{ platform[2] }}" target="_blank" class="btn btn-primary platform-link">
+            Watch Now
+          </a>
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="no-platforms">
+          <p>No streaming platforms available for this movie.</p>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<style>
+.detail-container {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.detail-header {
+  display: grid;
+  grid-template-columns: 300px 1fr;
+  gap: 3rem;
+  margin-bottom: 3rem;
+  align-items: start;
+}
+
+.poster-image {
+  width: 100%;
+  border-radius: 12px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+.detail-info h1 {
+  font-size: 2.5rem;
+  color: #ffffff;
+  margin-bottom: 1rem;
+  line-height: 1.2;
+}
+
+.detail-meta {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+  align-items: center;
+}
+
+.detail-meta span {
+  padding: 0.5rem 1rem;
+  background: #1a1f25;
+  border-radius: 20px;
+  font-weight: 600;
+  border: 1px solid #2a2f35;
+}
+
+.rating {
+  color: #ffd700;
+}
+
+.year, .duration {
+  color: #14e6dd;
+}
+
+.genre {
+  color: #6979f8;
+}
+
+.free-badge.large {
+  background: #00d26a;
+  color: white;
+  padding: 0.5rem 1rem;
+  font-size: 0.9rem;
+}
+
+.description {
+  color: #cccccc;
+  font-size: 1.1rem;
+  line-height: 1.6;
+  margin-bottom: 2rem;
+}
+
+.detail-actions {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.streaming-section {
+  margin-top: 3rem;
+}
+
+.streaming-section h2 {
+  font-size: 1.8rem;
+  color: #14e6dd;
+  margin-bottom: 2rem;
+  border-left: 4px solid #14e6dd;
+  padding-left: 1rem;
+}
+
+.platforms-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+}
+
+.platform-card {
+  background: #1a1f25;
+  border: 1px solid #2a2f35;
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 1rem;
+  transition: all 0.3s ease;
+}
+
+.platform-card:hover {
+  border-color: #14e6dd;
+  transform: translateY(-2px);
+}
+
+.platform-logo img {
+  height: 60px;
+  width: auto;
+  object-fit: contain;
+}
+
+.platform-info h3 {
+  color: #ffffff;
+  margin-bottom: 0.5rem;
+}
+
+.platform-link {
+  width: 100%;
+  margin-top: auto;
+}
+
+.no-platforms {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem;
+  color: #888;
+  background: #1a1f25;
+  border-radius: 12px;
+  border: 2px dashed #2a2f35;
+}
+
+@media (max-width: 768px) {
+  .detail-header {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+    text-align: center;
+  }
+  
+  .poster-image {
+    max-width: 250px;
+    margin: 0 auto;
+  }
+  
+  .detail-meta {
+    justify-content: center;
+  }
+}
+</style>
+
+<script>
+async function addToWatchlist(itemId, itemType) {
+  try {
+    const response = await fetch('/add_to_watchlist', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        item_id: itemId,
+        item_type: itemType
+      })
+    });
+    
+    const result = await response.json();
+    if (result.success) {
+      alert('Added to watchlist!');
+    } else {
+      alert('Already in watchlist!');
+    }
+  } catch (error) {
+    alert('Error adding to watchlist');
+  }
+}
+</script>
+{% endblock %}

@@ -1,0 +1,73 @@
+{% extends 'layout.html' %}
+{% block content %}
+<div class="page-header">
+  <h1>⭐ My Watchlist</h1>
+  <p>Your personal collection of movies and shows to watch</p>
+</div>
+
+{% if watchlist %}
+<div class="watchlist-container">
+  <div class="container">
+    {% for item in watchlist %}
+    <div class="card">
+      <img class="card-image" src="{{ item[3] }}" alt="{{ item[2] }}" />
+      <div class="card-content">
+        <h3 class="card-title">{{ item[2] }}</h3>
+        <p class="card-type">
+          {% if item[1] == 'movie' %}
+          🎬 Movie
+          {% else %}
+          📺 TV Show
+          {% endif %}
+        </p>
+        <p class="card-rating">⭐ {{ item[4] }}/10</p>
+        <div class="card-actions">
+          {% if item[1] == 'movie' %}
+          <a href="{{ url_for('movie_detail', movie_id=item[0]) }}" class="btn btn-outline">Where to Watch</a>
+          {% else %}
+          <a href="{{ url_for('show_detail', show_id=item[0]) }}" class="btn btn-outline">Where to Watch</a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>
+{% else %}
+<div class="empty-watchlist">
+  <h2>Your watchlist is empty</h2>
+  <p>Start adding movies and TV shows to your watchlist to keep track of what you want to watch!</p>
+  <div class="quick-links">
+    <a href="{{ url_for('movies') }}" class="btn btn-large">Browse Movies</a>
+    <a href="{{ url_for('shows') }}" class="btn btn-large">Browse TV Shows</a>
+  </div>
+</div>
+{% endif %}
+
+<style>
+.watchlist-container {
+  margin-top: 2rem;
+}
+
+.card-type {
+  color: #14e6dd;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.empty-watchlist {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: #888;
+}
+
+.empty-watchlist h2 {
+  color: #ffffff;
+  margin-bottom: 1rem;
+}
+
+.empty-watchlist .quick-links {
+  margin-top: 2rem;
+}
+</style>
+{% endblock %}
